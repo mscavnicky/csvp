@@ -16,6 +16,8 @@ def csvp(enum, separator: ',', quote: "")
   return if enum.nil?
 
   enum = enum.to_h if enum.is_a?(Struct) || enum.is_a?(OpenStruct)
+  enum = enum.attributes if defined?(ActiveRecord::Base) && enum.is_a?(ActiveRecord::Base)
+  enum = enum.to_a if defined?(ActiveRecord::Base) && enum.is_a?(ActiveRecord::Relation)
   # Convert all scalars to Array, so we do not need to special treat them.
   enum = [enum] if !enum.is_a?(Enumerable)
 
@@ -24,6 +26,7 @@ def csvp(enum, separator: ',', quote: "")
   columns = case enum.first
     when Hash then enum.first.keys
     when OpenStruct then enum.first.instance_variable_get("@table").keys
+    when -> (obj) { defined?(ActiveRecord::Base) && ActiveRecord::Base === obj } then enum.first.attributes.keys
     when Struct then enum.first.members
   end
   puts columns.map(&:to_s).map(&add_quotes).join(separator) if columns
@@ -32,6 +35,7 @@ def csvp(enum, separator: ',', quote: "")
     values = case row
       when Hash then row.values
       when OpenStruct then row.instance_variable_get("@table").values
+      when -> (obj) { defined?(ActiveRecord::Base) && ActiveRecord::Base === obj } then row.attributes.values
       when Enumerable then row
       else [row]
     end
