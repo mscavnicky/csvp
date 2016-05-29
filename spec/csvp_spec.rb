@@ -69,3 +69,15 @@ describe 'csvp' do
     expect { csvp('"Hi!"', quote: "\"") }.to output("\"\"\"Hi!\"\"\"\n").to_stdout
   end
 end
+
+describe 'tsvp' do
+  it 'prints tab-separated values' do
+    expect { tsvp({a: 1, b: 2}) }.to output("a\t1\nb\t2\n").to_stdout
+  end
+end
+
+describe 'qcsvp' do
+  it 'prints comma-separated values with quotes' do
+    expect { qcsvp({a: 1, b: 2}) }.to output("\"a\",\"1\"\n\"b\",\"2\"\n").to_stdout
+  end
+end

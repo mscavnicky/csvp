@@ -43,3 +43,11 @@ def csvp(enum, separator: ',', quote: "")
     puts values.map(&:to_s).map(&add_quotes).join(separator)
   end
 end
+
+def tsvp(enum)
+  csvp enum, separator: "\t"
+end
+
+def qcsvp(enum)
+  csvp enum, quote: "\""
+end
