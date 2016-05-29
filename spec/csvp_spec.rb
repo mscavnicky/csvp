@@ -14,6 +14,11 @@ describe 'csvp' do
     expect { csvp('abcd') }.to output("abcd\n").to_stdout
   end
 
+  it 'returns nil' do
+    allow(STDOUT).to receive(:puts)
+    expect(csvp(5)).to be nil
+  end
+
   it 'prints array' do
     expect { csvp([1, 2, 3]) }.to output("1\n2\n3\n").to_stdout
     expect { csvp([1, nil, 3]) }.to output("1\n\n3\n").to_stdout

@@ -42,6 +42,8 @@ def csvp(enum, separator: ',', quote: "")
 
     puts values.map(&:to_s).map(&add_quotes).join(separator)
   end
+
+  nil
 end
 
 def tsvp(enum)
