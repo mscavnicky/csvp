@@ -1,6 +1,7 @@
 # csvp
 
 [![Build Status](https://travis-ci.org/mscavnicky/csvp.svg?branch=master)](https://travis-ci.org/mscavnicky/csvp)
+[![codecov](https://codecov.io/gh/mscavnicky/csvp/branch/master/graph/badge.svg)](https://codecov.io/gh/mscavnicky/csvp)
 
 `csvp` helps you effortlessly print enumerables as CSV. Supports basic Ruby (Array, Hash, Set, Struct, OpenStruct) and ActiveRecord (Base, Relation) structures.
 
