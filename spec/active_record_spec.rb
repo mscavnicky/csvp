@@ -1,5 +1,5 @@
+require 'spec_helper'
 require 'active_record'
-require 'csvp'
 
 describe 'csvp' do
   before do

@@ -1,6 +1,6 @@
+require 'spec_helper'
 require 'set'
 require 'ostruct'
-require 'csvp'
 
 describe 'csvp' do
   class Dummy < Struct.new(:a, :b); end
