@@ -20,7 +20,7 @@ def csvp(enum, separator: ',', quote: "")
   # Vectorize scalar values into Enumerables to avoid multiple codepaths.
   enum = case enum
     when Struct then enum.to_h
-    when OpenStruct then enum.to_h
+    when -> (obj) { defined?(OpenStruct) && OpenStruct === obj } then enum.to_h
     when -> (obj) { defined?(ActiveRecord::Base) && ActiveRecord::Base === obj } then enum.attributes
     when -> (obj) { defined?(ActiveRecord::Relation) && ActiveRecord::Relation === obj } then enum.to_a
     when -> (obj) { !obj.is_a?(Enumerable) } then [enum]
@@ -30,7 +30,7 @@ def csvp(enum, separator: ',', quote: "")
   columns = case enum.first
     when Hash then enum.first.keys
     when Struct then enum.first.members
-    when OpenStruct then enum.first.instance_variable_get("@table").keys
+    when -> (obj) { defined?(OpenStruct) && OpenStruct === obj } then enum.first.instance_variable_get("@table").keys
     when -> (obj) { defined?(ActiveRecord::Base) && ActiveRecord::Base === obj } then enum.first.attributes.keys
   end
   puts columns.map(&:to_s).map(&add_quotes).join(separator) if columns
@@ -38,7 +38,7 @@ def csvp(enum, separator: ',', quote: "")
   enum.each do |row|
     values = case row
       when Hash then row.values
-      when OpenStruct then row.instance_variable_get("@table").values
+      when -> (obj) { defined?(OpenStruct) && OpenStruct === obj } then row.instance_variable_get("@table").values
       when -> (obj) { defined?(ActiveRecord::Base) && ActiveRecord::Base === obj } then row.attributes.values
       when Enumerable then row
       else [row]

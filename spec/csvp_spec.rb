@@ -1,6 +1,5 @@
 require 'spec_helper'
 require 'set'
-require 'ostruct'
 
 describe 'csvp' do
   class Dummy < Struct.new(:a, :b); end
@@ -36,10 +35,6 @@ describe 'csvp' do
     expect { csvp(Dummy.new(1, 2)) }.to output("a,1\nb,2\n").to_stdout
   end
 
-  it 'prints openstruct' do
-    expect { csvp(OpenStruct.new(a: 1, b: 2)) }.to output("a,1\nb,2\n").to_stdout
-  end
-
   it 'prints array of arrays' do
     expect { csvp([[1],[2]]) }.to output("1\n2\n").to_stdout
     expect { csvp([[1,2],[3,4]]) }.to output("1,2\n3,4\n").to_stdout
@@ -56,10 +51,6 @@ describe 'csvp' do
 
   it 'prints array of structs' do
     expect { csvp([Dummy.new(1, 2), Dummy.new(3, 4)]) }.to output("a,b\n1,2\n3,4\n").to_stdout
-  end
-
-  it 'prints array of openstructs' do
-    expect { csvp([OpenStruct.new(a: 1, b: 2), OpenStruct.new(a: 3, b: 4)]) }.to output("a,b\n1,2\n3,4\n").to_stdout
   end
 
   it 'uses specified separator' do
