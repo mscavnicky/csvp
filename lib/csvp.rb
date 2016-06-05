@@ -17,29 +17,39 @@ def csvp(enum, separator: ',', quote: "")
 
   add_quotes = proc { |str| "#{quote}#{str.gsub(quote, quote*2)}#{quote}" }
 
+  # Case rules encapsulated as procs.
+  open_struct = proc { |obj| defined?(OpenStruct) && OpenStruct === obj }
+  active_record_base = proc { |obj| defined?(ActiveRecord::Base) && ActiveRecord::Base === obj }
+  active_record_relation = proc { |obj| defined?(ActiveRecord::Relation) && ActiveRecord::Relation === obj }
+  not_enumerable = proc { |obj| !obj.is_a?(Enumerable) }
+
   # Vectorize scalar values into Enumerables to avoid multiple codepaths.
   enum = case enum
     when Struct then enum.to_h
-    when -> (obj) { defined?(OpenStruct) && OpenStruct === obj } then enum.to_h
-    when -> (obj) { defined?(ActiveRecord::Base) && ActiveRecord::Base === obj } then enum.attributes
-    when -> (obj) { defined?(ActiveRecord::Relation) && ActiveRecord::Relation === obj } then enum.to_a
-    when -> (obj) { !obj.is_a?(Enumerable) } then [enum]
+    when open_struct then enum.to_h
+    when active_record_base then enum.attributes
+    when active_record_relation then enum.to_a
+    when not_enumerable then [enum]
     else enum
   end
 
-  columns = case enum.first
-    when Hash then enum.first.keys
-    when Struct then enum.first.members
-    when -> (obj) { defined?(OpenStruct) && OpenStruct === obj } then enum.first.instance_variable_get("@table").keys
-    when -> (obj) { defined?(ActiveRecord::Base) && ActiveRecord::Base === obj } then enum.first.attributes.keys
+  # Try to determine the header row.
+  first = enum.first
+
+  columns = case first
+    when Hash then first.keys
+    when Struct then first.members
+    when open_struct then first.instance_variable_get("@table").keys
+    when active_record_base then first.attributes.keys
   end
   puts columns.map(&:to_s).map(&add_quotes).join(separator) if columns
 
+  # Print out the rest of the CSV.
   enum.each do |row|
     values = case row
       when Hash then row.values
-      when -> (obj) { defined?(OpenStruct) && OpenStruct === obj } then row.instance_variable_get("@table").values
-      when -> (obj) { defined?(ActiveRecord::Base) && ActiveRecord::Base === obj } then row.attributes.values
+      when open_struct then row.instance_variable_get("@table").values
+      when active_record_base then row.attributes.values
       when Enumerable then row
       else [row]
     end
