@@ -3,7 +3,7 @@ Gem::Specification.new do |s|
   s.version     = '0.1.0'
   s.date        = Time.now.strftime('%Y-%m-%d')
   s.summary     = 'CSV Print'
-  s.description = 'Print enumerables as CSV effortlessly.'
+  s.description = 'Effortlessly print enumerables as CSV.'
   s.authors     = ['Martin Scavnicky']
   s.email       = 'martin.scavnicky@gmail.com'
   s.files       = ['lib/csvp.rb']
