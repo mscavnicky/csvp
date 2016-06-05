@@ -1,2 +1,5 @@
+0.1.1
+  - Fix uninitialized constant OpenStruct error.
+
 0.1.0
   - Initial Release.
