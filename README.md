@@ -52,22 +52,23 @@ bob@csvp.com,Bob,43
 
 ## Options
 
-You can also choose the `separator`
+All of the options supported by Ruby CSV module can be used.
+
+So you can choose the column separator
 
 ```
-> csvp [['Alice', 'Bob'],['Chuck', 'Donald']], separator: "\t"
+> csvp [['Alice', 'Bob'],['Chuck', 'Donald']], col_sep: "\t"
 Alice	Bob
 Chuck	Donald
 ```
 
-or the `quote` character
+or the quote character
 
 ```
-> csvp [['Alice', 'Bob'],['Chuck', 'Donald']], quote: "\""
+> csvp [['Alice', 'Bob'],['Chuck', 'Donald']], quote_char: "\"", force_quotes: true
 "Alice","Bob"
 "Chuck","Donald"
 ```
-
 
 Conveniently, the two options above are wrapped in their own method - `tsvp` and `qcsvp` respectively.
 

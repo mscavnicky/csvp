@@ -14,8 +14,8 @@ describe 'csvp' do
   end
 
   it 'returns nil' do
-    allow(STDOUT).to receive(:puts)
-    expect(csvp(5)).to be nil
+    expect { @result = csvp(5) }.to output("5\n").to_stdout
+    expect(@result).to be_nil
   end
 
   it 'prints array' do
@@ -54,15 +54,15 @@ describe 'csvp' do
   end
 
   it 'uses specified separator' do
-    expect { csvp([[1,2],[3,4]], separator: "\t") }.to output("1\t2\n3\t4\n").to_stdout
+    expect { csvp([[1,2],[3,4]], col_sep: "\t") }.to output("1\t2\n3\t4\n").to_stdout
   end
 
   it 'uses quotes' do
-    expect { csvp([[1,2],[3,4]], quote: "\"") }.to output("\"1\",\"2\"\n\"3\",\"4\"\n").to_stdout
+    expect { csvp([[1,2],[3,4]], quote_char: "\"", force_quotes: true) }.to output("\"1\",\"2\"\n\"3\",\"4\"\n").to_stdout
   end
 
   it 'escapes quotes' do
-    expect { csvp('"Hi!"', quote: "\"") }.to output("\"\"\"Hi!\"\"\"\n").to_stdout
+    expect { csvp('"Hi!"', quote_char: "\"") }.to output("\"\"\"Hi!\"\"\"\n").to_stdout
   end
 end
 
